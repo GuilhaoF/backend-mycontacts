@@ -6,6 +6,10 @@ class ContactController {
     const { orderBy } = request.params;
     // listar todos os registros
     const contacts = await ContactsRepository.findAll(orderBy);
+
+    // wildcard -> coringa
+    response.setHeader('Acces-Control-Allow-Origin', '*');
+
     response.json(contacts);
   }
 
@@ -16,7 +20,7 @@ class ContactController {
     const contact = await ContactsRepository.findById(id);
 
     if (!contact) {
-      return response.status(404).json({ error: 'User not found' });
+      return response.status(404).json({ error: 'Contact not found' });
     }
     response.json(contact);
   }
@@ -39,7 +43,7 @@ class ContactController {
       name, email, phone, category_id,
     });
 
-    response.json(contact);
+    response.status(201).json(contact);
   }
 
   async update(request, response) {
@@ -52,7 +56,7 @@ class ContactController {
     // verificando se o id do contato existe
     const contactExists = await ContactsRepository.findById(id);
     if (!contactExists) {
-      return response.status(404).json({ error: 'User not found' });
+      return response.status(404).json({ error: 'Contact not found' });
     }
 
     if (!name) {
@@ -72,7 +76,9 @@ class ContactController {
   async delete(request, response) {
     // deletar um registro
     const { id } = request.params;
+
     await ContactsRepository.delete(id);
+
     response.sendStatus(204);
   }
 }
