@@ -97,7 +97,7 @@ class ContactController {
       name,
       email: email || null,
       phone,
-      category_id,
+      category_id: category_id || null,
     });
     response.json(contact);
   }
